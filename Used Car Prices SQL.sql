@@ -96,16 +96,7 @@ order by max(price) desc
 --used a CTE with partition to help list the (year and model) of each expensive car from each brand
 with cardataCTE as
  (
- 	select
-	 	cardata."carID",
-	  cardata.year,
-	 	brand,
-	  model,
-	 	cast(max(price) as money) as pricetag,
-	  row_number() over(
-			partition by brand
-			order by max(price) desc
-		) rownumber
+ 	select cardata."carID", cardata.year, brand, model, cast(max(price) as money) as pricetag, row_number() over(partition by brand order by max(price) desc) rownumber
 	from cardata JOIN carprice
 	    on cardata."carID" = carprice."carID"
 	group by cardata."carID", cardata.year
